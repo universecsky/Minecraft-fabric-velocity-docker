@@ -1,0 +1,1 @@
+This is a compose.yaml file for docker that creates a fabric and velocity minecraft server container. This utilizes the port 25565 for java and 19132 for bedrock. It also includes FabricProxyLite, Fabric API, Geyser, Floodgate, ViaVersion and ViaBackwards for maximum compatibility. 
