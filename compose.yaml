@@ -1,0 +1,39 @@
+services:
+  velocity:
+    image: itzg/mc-proxy
+    environment:
+      TYPE: VELOCITY
+      MEMORY: 512M
+      PLUGINS: |
+        https://cdn.modrinth.com/data/P1OZGk5p/versions/BAfk9o0d/ViaVersion-5.7.1-SNAPSHOT.jar
+        https://cdn.modrinth.com/data/NpvuJQoq/versions/psaFMf10/ViaBackwards-5.7.1-SNAPSHOT.jar
+        https://cdn.modrinth.com/data/wKkoqHrH/versions/lDwx24QQ/Geyser-Velocity.jar
+        https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity
+    ports:
+      - "25565:25577"
+      - "19132:19132/udp" # Bedrock Port (Must be UDP!)
+    volumes:
+      - ./velocity:/server
+      - ./velocity/plugins:/server/plugins
+    restart: unless-stopped
+
+  fabric-server:
+    image: itzg/minecraft-server
+    environment:
+      EULA: "TRUE"
+      TYPE: FABRIC
+      ONLINE_MODE: "FALSE" # Required for proxying
+      VERSION: "1.21.5" # Remove this for latest version
+      # Automatically download required mods from Modrinth
+      MODRINTH_PROJECTS: |
+        fabric-api
+        fabricproxy-lite
+      MEMORY: 6G
+    volumes:
+      - ./fabric-data:/data
+    deploy:
+      resources:
+        limits:
+          cpus: '3.0'
+          memory: 8G
+    restart: unless-stopped
